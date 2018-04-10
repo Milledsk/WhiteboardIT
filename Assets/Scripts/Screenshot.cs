@@ -88,7 +88,8 @@ public class Screenshot : MonoBehaviour {
 
         //Make the texture smaller for faster upload
         Texture2D resizedTexture = ScaleTexture(newImageTexture, width / 2, height / 2);
-        
+        //Texture2D resizedTexture = ScaleTexture(newImageTexture, width / 3 * 2, height / 3 * 2);
+
         // Encode texture into PNG
         imagePart = newImageTexture.EncodeToPNG();
 
@@ -101,7 +102,7 @@ public class Screenshot : MonoBehaviour {
     public void UploadToInAppBrowser(string base64Image, int id)
     {
         
-        BrowserOpener browserOpener = GameObject.Find("InAppBrowserBridge").GetComponent<BrowserOpener>();
+        MyBrowserOpener browserOpener = GameObject.Find("InAppBrowserBridge").GetComponent<MyBrowserOpener>();
 
         javaScriptString = "window.addImage(\"data:image/png;base64," + base64Image + "\" , " + id + ")";
         browserOpener.OpenBrowser();   

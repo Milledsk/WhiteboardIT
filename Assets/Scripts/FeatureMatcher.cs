@@ -12,7 +12,7 @@ public class FeatureMatcher {
     private List<Texture2D> photos;
     private int winnerThreshold = 10;
 
-    public ImageString MatchFeatures(string image, List<string> images)
+    public ImageString MatchFeatures(string base64image, List<string> base64imageList)
     {
         List<MatOfDMatch> winnerMatches = new List<MatOfDMatch>();
         MatOfKeyPoint winnerKeyPoints = new MatOfKeyPoint();
@@ -20,11 +20,11 @@ public class FeatureMatcher {
         int winnerIndex = -1;
         int winnerValue = 0;
 
-        Texture2D imgTexture = base64ImageToTexture(image);
+        Texture2D imgTexture = base64ImageToTexture(base64image);
         List<Texture2D> imgTextures = new List<Texture2D>();
-        for(int i = 0; i < images.Count; i++)
+        for(int i = 0; i < base64imageList.Count; i++)
         {
-            imgTextures.Add(base64ImageToTexture(images[i]));
+            imgTextures.Add(base64ImageToTexture(base64imageList[i]));
         }
 
         //Create Mat from texture
@@ -40,10 +40,12 @@ public class FeatureMatcher {
         detector.detect(img1Mat, keypoints1);
         extractor.compute(img1Mat, keypoints1, descriptors1);
 
-        if(descriptors1.rows() < 10)
+        Debug.Log("Billede features: " + descriptors1.rows());
+
+        if (descriptors1.rows() < 10)
         {
             Debug.Log("ARRRRRRGH der er ikke mange descripters i mit original-billede");
-            return new ImageString(image, winnerIndex);
+            return new ImageString(base64image, winnerIndex);
         }
 
             //Run through each image in list
@@ -64,7 +66,7 @@ public class FeatureMatcher {
 
             //Match photo with image from list
             DescriptorMatcher matcher = DescriptorMatcher.create(DescriptorMatcher.BRUTEFORCE_HAMMINGLUT);
-
+            Debug.Log("Billede2 features: " + descriptors2.rows());
             if (descriptors2.rows() < 10)
             {
                 Debug.Log("ARRRRRRGH der er ikke mange descripters i mit test billede: " + i);
@@ -104,7 +106,7 @@ public class FeatureMatcher {
         if(winnerIndex == -1)
         {
             Debug.Log("No winner");
-            return new ImageString(image, winnerIndex);
+            return new ImageString(base64image, winnerIndex);
         }
 
         Debug.Log("No winner");

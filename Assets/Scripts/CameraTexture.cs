@@ -11,14 +11,17 @@ public class CameraTexture : MonoBehaviour {
     private WebCamTexture webcamTexture;
     public GameObject succes;
 
+    public Quaternion baseRotation;
+
     void Start()
     {
         Debug.Log("Start");
         webcamTexture = new WebCamTexture();
-
+        ((RectTransform)transform).sizeDelta = new Vector2(Screen.height / 3 * 4, Screen.height);
         rawimage.texture = webcamTexture;
         rawimage.transform.localRotation = Quaternion.Euler(0, 0, -90);
         rawimage.material.mainTexture = webcamTexture;
+        //baseRotation = transform.rotation;
         webcamTexture.Play();
         Debug.Log(webcamTexture);
 
@@ -28,6 +31,11 @@ public class CameraTexture : MonoBehaviour {
             Debug.Log("Read QR");
         }
 
+    }
+
+    void Update()
+    {
+        //transform.rotation = baseRotation * Quaternion.AngleAxis(webcamTexture.videoRotationAngle, Vector3.up);
     }
 
     IEnumerator ReadQR()
@@ -56,6 +64,7 @@ public class CameraTexture : MonoBehaviour {
                 Manager.Instance.canvasUrl = canvasUrl + "?raw";
 
                 yield return new WaitForSeconds(2);
+                
                 SceneManager.LoadScene("SnapshotMedFeatureMatcher");
                 break; 
             }
@@ -63,6 +72,12 @@ public class CameraTexture : MonoBehaviour {
 
         }
 
+    }
+
+    void OnDestroy()
+    {
+        webcamTexture.Stop();
+        print("Script was destroyed");
     }
 
 
