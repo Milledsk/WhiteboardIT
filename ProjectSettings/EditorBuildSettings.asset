@@ -8,6 +8,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/StartWithQR.unity
     guid: a387f3e980931bb41b2ab12f704e2994
-  - enabled: 0
+  - enabled: 1
     path: Assets/SnapshotMedFeatureMatcher.unity
     guid: 0aba2ab75a84e614b943bf883fca7546
